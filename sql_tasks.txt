@@ -65,5 +65,28 @@ and(insurance_name="lic" or insurance_name="icici");
 
 SELECT A.name as employee_name,B.name as immediate_head from Employee_Table A,Employee_Table B where A.immediate_head_id=B.emp_id AND A.immediate_head_id not NULL
 
+/*9. Get the list of employee names and their respective immediate head name with  their respective department names.
+  Eg: emp name | emp department name | immediate head name | immediate head department name
+*/
+select a.name as emp_name, a.dept_name as emp_department_name,
+b.name as immediate_head_name,b.dept_name as immediate_head_department_name from (select * from Employee_Table 
+ join Department_Table on Employee_Table.dept_id=Department_Table.dept_id)
+ as a join
+ (select * from Employee_Table 
+  join Department_Table on Employee_Table.dept_id=Department_Table.dept_id)
+  as b where a.immediate_head_id=b.emp_id and a.immediate_head_id not null; 
 
 
+
+/*10. Get the list of employees whose immediate head working in location ‘madhapur’
+       and whose salary is less than twice the salary of their respective immediate   heads.
+*/
+select DISTINCT A.name from 
+(select * from Employee_Table join Employee_Info_Table
+on Employee_Table.employee_info=Employee_Info_Table.id) as A
+                            JOIN
+(select * from Employee_Table join Employee_Info_Table
+on Employee_Table.employee_info=Employee_Info_Table.id
+where emp_id in (select emp_id from Employee_Office_Table join Office_Table on 
+                            Employee_Office_Table.office_id =Office_Table.office_id where 
+                            place ="madhapur" and Employee_Table.immediate_head_id is NULL))as B where A.salary < 2*B.salary and A.immediate_head_id = B.emp_id;

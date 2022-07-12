@@ -59,3 +59,11 @@ JOIN (SELECT * FROM Employee_Office_Table JOIN Office_Table ON Employee_Office_T
 ON Employee_Table.emp_id=TJ.emp_id) 
 where place ="madhapur" AND doj>"20/02/2022" AND salary>20000 
 and(insurance_name="lic" or insurance_name="icici");
+
+/*8. Get the list of employee names and their respective immediate head name
+*/
+
+SELECT A.name as employee_name,B.name as immediate_head from Employee_Table A,Employee_Table B where A.immediate_head_id=B.emp_id AND A.immediate_head_id not NULL
+
+
+
